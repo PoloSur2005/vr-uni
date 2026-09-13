@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0b1d3a">
+  <meta name="description" content="Recorrido virtual 360° del gimnasio de la universidad, compatible con visores VR y pantallas normales.">
+  <title>Gimnasio 360° · Recorrido VR</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕶️</text></svg>">
+  <link rel="preload" href="imagen.jpeg" as="image" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+  <script src="js/components.js"></script>
+</head>
+<body>
+  <a-scene
+    xr-mode-ui="enabled: false"
+    renderer="antialias: false; highRefreshRate: true"
+    loading-screen="dotsColor: #ffffff; backgroundColor: #0b1d3a"
+    device-orientation-permission-ui="deviceMotionMessage: Este recorrido necesita acceso a los sensores de movimiento de tu dispositivo.; httpsMessage: Abre este sitio con HTTPS para usar VR y los sensores del dispositivo.; denyButtonText: No permitir; allowButtonText: Permitir; cancelButtonText: Cancelar"
+    keyboard-shortcuts="enterVR: false">
+
+    <a-assets timeout="15000">
+      <img id="pano" src="imagen.jpeg" crossorigin="anonymous">
+    </a-assets>
+
+    <!-- Panorama equirectangular. rotation -90 dejaría al frente el centro de la foto; -51 centra el escenario. -->
+    <a-sky src="#pano" rotation="0 -51 0" segments-width="64" segments-height="32"></a-sky>
+
+    <!-- Cámara fija en el centro: sin wasd-controls, solo mirar alrededor. -->
+    <a-entity id="cam"
+      camera="fov: 80"
+      position="0 1.6 0"
+      look-controls="magicWindowTrackingEnabled: true; touchEnabled: true; mouseEnabled: true"
+      zoom-controls></a-entity>
+  </a-scene>
+
+  <!-- Interfaz sobre la escena -->
+  <div id="ui">
+    <header id="info">
+      <h1>Cancha de basquet · La Salle Bajío</h1>
+      <p id="hint">Arrastra para mirar alrededor · Rueda o pellizca para acercar</p>
+    </header>
+
+    <button id="btn-vr" type="button" disabled>
+      <span class="icon" aria-hidden="true">🐱</span>
+      <span class="label">Cargando…</span>
+    </button>
+  </div>
+
+  <button id="btn-exit-stereo" type="button" hidden>✕ Salir de VR</button>
+
+  <div id="rotate-hint" hidden>
+    <span aria-hidden="true">📱↻</span>
+    <p>Gira tu celular en horizontal y colócalo en el visor</p>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

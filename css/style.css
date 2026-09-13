@@ -1,0 +1,192 @@
+:root {
+  --glass: rgba(11, 29, 58, 0.62);
+  --glass-strong: rgba(11, 29, 58, 0.85);
+  --border: rgba(255, 255, 255, 0.18);
+  --text: #ffffff;
+  --text-soft: rgba(255, 255, 255, 0.78);
+  --accent: #e3263b;
+  --accent-hover: #f23a4f;
+  --radius: 999px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #0b1d3a;
+  font-family: var(--font);
+  color: var(--text);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a-scene,
+.a-canvas {
+  touch-action: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- Interfaz ---------- */
+
+#ui {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding:
+    calc(16px + env(safe-area-inset-top))
+    calc(16px + env(safe-area-inset-right))
+    calc(24px + env(safe-area-inset-bottom))
+    calc(16px + env(safe-area-inset-left));
+  pointer-events: none; /* los arrastres llegan a la escena */
+}
+
+#ui > * {
+  pointer-events: auto;
+}
+
+#info {
+  max-width: min(560px, 100%);
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  pointer-events: none;
+}
+
+#info h1 {
+  margin: 0;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+#info p {
+  margin: 4px 0 0;
+  font-size: clamp(0.75rem, 2.2vw, 0.875rem);
+  color: var(--text-soft);
+}
+
+#btn-vr {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 0 32px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--text);
+  font: 700 clamp(1.05rem, 3.5vw, 1.35rem) / 1 var(--font);
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.2s ease;
+}
+
+#btn-vr .icon {
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+#btn-vr:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+#btn-vr:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+#btn-vr:focus-visible,
+#btn-exit-stereo:focus-visible {
+  outline: 3px solid #ffd54a;
+  outline-offset: 3px;
+}
+
+#btn-vr:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+body.is-vr #ui {
+  display: none;
+}
+
+/* ---------- Modo estéreo ---------- */
+
+#btn-exit-stereo {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 50%;
+  z-index: 40; /* por encima del aviso de girar */
+  transform: translateX(-50%);
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--glass-strong);
+  color: var(--text);
+  font: 600 0.95rem / 1 var(--font);
+  cursor: pointer;
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
+#btn-exit-stereo.visible {
+  opacity: 1;
+}
+
+/* Línea divisoria entre los dos ojos: ayuda a centrar el celular en el visor. */
+body.is-stereo::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 15;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+#rotate-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: var(--glass-strong);
+  text-align: center;
+  pointer-events: none;
+}
+
+#rotate-hint span {
+  font-size: 3.5rem;
+}
+
+#rotate-hint p {
+  max-width: 280px;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
